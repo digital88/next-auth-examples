@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    env_file: .env
+    ports:
+      - "35432:5432"
+    networks:
+      - compose-network
+    volumes:
+      - next-auth-example-pg-prisma-redis-data:/var/lib/postgresql/data
+    shm_size: 256MB
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-d", "$POSTGRES_DB", "-U", "$POSTGRES_USER" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+volumes:
+  next-auth-example-pg-prisma-redis-data:
+networks:
+  compose-network:

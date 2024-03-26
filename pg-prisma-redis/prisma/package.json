@@ -1,0 +1,20 @@
+{
+  "name": "prisma",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "generate": "CHECKPOINT_DISABLE=1; npx prisma generate --no-engine",
+    "validate": "CHECKPOINT_DISABLE=1; npx prisma validate",
+    "format": "CHECKPOINT_DISABLE=1; npx prisma format",
+    "push": "CHECKPOINT_DISABLE=1; npx prisma db push"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prisma": "^5.11.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.11.0"
+  }
+}

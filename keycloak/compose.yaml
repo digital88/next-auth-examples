@@ -1,0 +1,55 @@
+services:
+  keycloak:
+    pull_policy: build
+    image: next-auth-examples-keycloak:24.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      QUARKUS_TRANSACTION_MANAGER_ENABLE_RECOVERY: true
+      # KC_DB_URL: "jdbc:postgresql://postgres/keycloak"
+      # KC_DB_USERNAME: "keycloak-postgres-admin"
+      # KC_DB_PASSWORD: ""
+      # KEYCLOAK_ADMIN: "keycloak-admin"
+      # KEYCLOAK_ADMIN_PASSWORD: ""
+    ports:
+      - "8443:8443"
+    networks:
+      - keycloak-network
+    volumes:
+      - kc-objstore:/ObjectStore/
+    command: start --optimized
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: curl -f https://localhost:8443/health/live || exit 1
+      interval: 60s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    env_file: .env
+    # environment:
+    #   POSTGRES_USER: "keycloak-postgres-admin"
+    #   POSTGRES_PASSWORD: ""
+    #   POSTGRES_DB: "keycloak"
+    networks:
+      - keycloak-network
+    volumes:
+      - kc-pg-data:/var/lib/postgresql/data
+    shm_size: 256MB
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-d", "$POSTGRES_DB", "-U", "$POSTGRES_USER" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+volumes:
+  kc-pg-data:
+  kc-objstore:
+networks:
+  keycloak-network:
+    driver: bridge
