@@ -12,6 +12,7 @@
     "clean-all": "npx rimraf .next node_modules"
   },
   "dependencies": {
+    "@prisma/client": "^5.11.0",
     "next": "14.1.4",
     "next-auth": "^5.0.0-beta.16",
     "react": "^18",
