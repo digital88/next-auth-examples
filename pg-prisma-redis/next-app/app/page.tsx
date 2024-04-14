@@ -1,10 +1,10 @@
-import { auth } from "@/auth";
-import Link from "next/link";
+import { auth } from "@/auth"
+import Link from "next/link"
 
 export default async function Home() {
   const session = await auth()
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
+    <main className="min-h-screen flex flex-col items-start p-24 w-full">
       <p>This is root route.</p>
       <div>
         <div>
@@ -25,5 +25,5 @@ export default async function Home() {
         </div>
       </div>
     </main>
-  );
+  )
 }
